@@ -1,6 +1,8 @@
 # Golang rtmp server demo
 
-##　Requirement
+This is a very tiny demo with rtmp protocol server/client side implement.
+
+## Requirement
 
 You need golang to build all tools. 
 
