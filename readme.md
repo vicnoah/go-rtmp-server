@@ -34,3 +34,9 @@ set url to
 ```
 url: 'http://your.domain.host:8089/live'
 ```
+
+
+Now you may visit the demo at 
+```
+http://your.domain.host:2015/
+```
