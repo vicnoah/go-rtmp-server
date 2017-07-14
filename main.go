@@ -1,6 +1,8 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"io"
 	"net/http"
 	"sync"
@@ -10,6 +12,10 @@ import (
 	"github.com/nareix/joy4/format"
 	"github.com/nareix/joy4/format/flv"
 	"github.com/nareix/joy4/format/rtmp"
+)
+
+var (
+	addr = flag.String("l", ":8089", "host:port of the go-rtmp-server")
 )
 
 func init() {
@@ -27,6 +33,7 @@ func (self writeFlusher) Flush() error {
 }
 
 func main() {
+	flag.Parse()
 	server := &rtmp.Server{}
 
 	l := &sync.RWMutex{}
@@ -90,11 +97,50 @@ func main() {
 
 			avutil.CopyFile(muxer, cursor)
 		} else {
-			http.NotFound(w, r)
+			fmt.Println("Request url: ", r.URL.Path)
+			if r.URL.Path != "/" {
+				http.NotFound(w, r)
+			} else {
+				homeHtml := `
+				<!DOCTYPE html>
+<html>
+	<head>
+		<title>Demo live</title>
+		<style>
+		body {
+			margin:0;
+			padding:0;
+		}
+		video {
+			width:100%;
+			height:100%;
+		}
+		</style>
+	</head>
+	<body>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/flv.js/1.3.2/flv.min.js"></script>
+		<video id="videoElement"></video>
+		<script>
+if (flvjs.isSupported()) {
+	var videoElement = document.getElementById('videoElement');
+	var flvPlayer = flvjs.createPlayer({
+		type: 'flv',
+		url: '/live'
+	});
+	flvPlayer.attachMediaElement(videoElement);
+	flvPlayer.load();
+	flvPlayer.play();
+}
+		</script>
+	</body>
+</html>`
+				io.WriteString(w, homeHtml)
+			}
 		}
 	})
 
-	go http.ListenAndServe(":8089", nil)
+	go http.ListenAndServe(*addr, nil)
+	fmt.Println("Listen and serve ", *addr)
 
 	server.ListenAndServe()
 
