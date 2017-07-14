@@ -121,31 +121,19 @@ func main() {
 			background:#000;
 		}
 		
-        .mainContainer {
-            display: block;
-            width: 1280px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .centeredVideo {
-            display: block;
-            width: 100%;
-			height: 720px;
-			margin-top:50px;
-            margin-left: auto;
-            margin-right: auto;
-            margin-bottom: auto;
-        }
+        video {
+			position:absolute;
+			width:100%;
+			height:100%;
+		}
 		</style>
 	</head>
 	<body>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/flv.js/1.3.2/flv.min.js"></script>
-		   <div class="mainContainer">
-        <video id="videoElement" name="videoElement" class="centeredVideo" controls autoplay width="1024" height="576">
+		 
+        <video id="videoElement" controls autoplay x5-video-player-type="h5" x5-video-player-fullscreen="true" playsinline webkit-playsinline>
             Your browser is too old which doesn't support HTML5 video.
         </video>
-    </div>
 		<script>
 if (flvjs.isSupported()) {
 	var videoElement = document.getElementById('videoElement');
