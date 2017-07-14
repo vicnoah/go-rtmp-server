@@ -27,3 +27,11 @@ Now you may visit the demo at
 ```
 http://your.domain.host:8089/
 ```
+
+the :8089 is the default listen port of the http server. and you can change it as you want
+
+```
+Usage of .\go-rtmp-server.exe:
+  -l string
+        host:port of the go-rtmp-server (default ":8089")
+```
