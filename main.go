@@ -16,6 +16,7 @@ import (
 
 var (
 	addr = flag.String("l", ":8089", "host:port of the go-rtmp-server")
+	sKey = flag.String("k", "", "Stream key, to protect your stream")
 )
 
 func init() {
@@ -57,6 +58,13 @@ func main() {
 		streams, _ := conn.Streams()
 
 		l.Lock()
+		fmt.Println("request string->", conn.URL.RequestURI())
+		fmt.Println("request key->", conn.URL.Query().Get("key"))
+		streamKey := conn.URL.Query().Get("key")
+		if streamKey != *sKey {
+			fmt.Println("Due to key not match, denied stream")
+			return //If key not match, deny stream
+		}
 		ch := channels[conn.URL.Path]
 		if ch == nil {
 			ch = &Channel{}
